@@ -2,7 +2,7 @@ package SpaceAge;
 
 use strict;
 use warnings;
-no warnings 'once'; # on_mercury etc only used once
+no warnings 'once'; # Quashes the "only used once" warnings
 
 sub new{
 	# Age of a person in seconds
