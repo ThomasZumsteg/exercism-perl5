@@ -12,13 +12,15 @@ sub new {
 sub slice {
 	# Slices a number in slices of a certain size
 	my ($self, $sliceSize) = @_;
+	# Protects against slices being longer then the number
 	die "ArgumentError" unless $sliceSize <= length $$self;
-	my $slices = [];
-	for (my $i = 0; $i <= ((length $$self) - $sliceSize); $i++) {
+	my @slices;
+	for (my $i = 0; $i <= length($$self) - $sliceSize; $i++) {
+		# Splits a substring into individual digits
 		my @slice = split //, substr $$self, $i, $sliceSize;
-		push @$slices, @slice;
+		push @slices, \@slice;
 	}
-	return $slices;
+	return \@slices;
 }
 
 1;
