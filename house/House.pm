@@ -18,7 +18,7 @@ my $house = [ {item=>"house that Jack built.\n"},
 			  {item=>"horse and the hound and the horn", 	action=>"belonged to"},
 			];
 
-# A new House class, 
+# A new House instance
 sub new { bless $house, shift }
 
 sub recite {
