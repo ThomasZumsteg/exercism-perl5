@@ -24,6 +24,10 @@ sub on_any {
 }
 
 # Functions that return the number of years on that planet
+
+# FIXME
+# our $AUTOLOAD
+# sub AUTOLOAD {}
 *on_mercury = on_any(0.2408467);
 *on_venus	= on_any(0.61519726);
 *on_earth   = on_any(1);
