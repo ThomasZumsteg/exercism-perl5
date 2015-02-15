@@ -3,44 +3,47 @@ package CustomSet;
 use strict;
 use warnings;
 
-use constant { TRUE => 1, FALSE => 0};
+use constant { TRUE => 1, FALSE => 0 };
 
 sub new {
-	my $self = bless [], shift;
-	$self->is_member($_) or $self->add($_) foreach (@_);
+	my ($class, @items) = @_;
+	my $self = bless [], $class;
+	foreach my $item (@items) {
+		$self->add($item) unless $self->is_member($item);
+	}
 	return $self;
 }
 
 sub is_member {
 	my ($self, $item) = @_;
-	print "Checking membership $item\n";
 	$_ eq $item and return TRUE foreach (@$self);
-	print "nope\n";
 	return FALSE;
 }
 
 sub add {
 	my ($self, $item) = @_;
 	my $i = 0;
-	print "Adding $item\n";
-	for ( ; $i <= $#$self and $self->[$i] lt $item; $i++) {
-		return if $self->[$i] eq $item;
-	}
-	print "Added $item at $i\n";
-	splice @$self, $i, 0, $item;
+	$i++ until $#$self < $i or $item le $self->[$i];
+	splice @$self, $i, 0, $item if $#$self < $i or $self->[$i] ne $item;
+	return $self;
 }
 
 sub is_equal {
-	my ($self, $anotherSet) = @_;
-	$self->[$_] == $anotherSet->[$_] or return FALSE foreach (0..$#$self);
-	return $#$self == $#$anotherSet;
+	my ($self, $set) = @_;
+	return FALSE unless $set->size() == $self->size();
+	$set->is_member($_) or return FALSE foreach (@$self);
+	return TRUE;
 }
 
-sub empty {
+sub empty {}
 
+sub delete {
+	my ($self, $item) = @_;
+	for (my $i = 0; $i <= $#$self; $i++ ) {
+		splice @$self, $i, 1 if $self->[$i] eq $item;
+	}
+	return $self;
 }
-
-sub delete {}
 
 sub difference {}
 
@@ -48,18 +51,24 @@ sub is_disjoint {}
 
 sub intersect {}
 
-sub size {}
+sub size { $#{shift()} + 1 }
 
 sub is_subset {
 	my ($self, $anotherSet) = @_;
 	$self->[$_] == $anotherSet->[$_] or return FALSE foreach (0..$#$self);
 }
 
-sub to_list { [@{shift()}] }
+sub to_list { [ @{shift()} ] }
 
-sub union {}
+sub union {
+	my ($self, $set) = @_;
+	$self->add($_) foreach (@$set);
+	return $self;
+}
 
-my $set = CustomSet->new((1..10));
-print "@$set\n";
+# my $setA = CustomSet->new(1..3)->add(3);
+# my $setB = CustomSet->new(1,2,3);
+# print "@{$setA->to_list}\n@{$setB->to_list}\n";
+# print "Test\n" if CustomSet->new(1,2,3)->is_equal(CustomSet->new());
 
 1;
