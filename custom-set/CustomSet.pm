@@ -16,7 +16,7 @@ sub new {
 
 sub is_member {
 	my ($self, $item) = @_;
-	$_ eq $item and return TRUE foreach (@$self);
+	$_ eq $item and return TRUE foreach ($self->to_list);
 	return FALSE;
 }
 
@@ -31,7 +31,7 @@ sub add {
 sub is_equal {
 	my ($self, $set) = @_;
 	return FALSE unless $set->size() == $self->size();
-	$set->is_member($_) or return FALSE foreach (@$self);
+	$set->is_member($_) or return FALSE foreach ($self->to_list);
 	return TRUE;
 }
 
@@ -50,23 +50,22 @@ sub delete {
 }
 
 sub difference {
-	# my ($self, $set) = @_;
-	# my $union = $self->union($set);
-	# my $intersect = $self->intersect($set);
-	# $union->delete($_) foreach (@$intersect);
-	# return $union;
+	my ($self, $set) = @_;
+	my $difference = ref($self)->new($self->to_list);
+	$difference->delete($_) foreach ($set->to_list);
+	return $difference;
 }
 
 sub is_disjoint {
 	my ($self, $set) = @_;
-	$self->is_member($_) and return FALSE foreach (@$set);
+	$self->is_member($_) and return FALSE foreach ($set->to_list);
 	return TRUE;
 }
 
 sub intersect {
 	my ($self, $set) = @_;
 	my $intersect = ref($self)->new();
-	foreach my $item ( @$self, @$set ) {
+	foreach my $item ( $self->to_list, $set->to_list ) {
 		$intersect->add($item) if $self->is_member($item) and $set->is_member($item);
 	}
 	return $intersect;
@@ -76,22 +75,17 @@ sub size { $#{shift()} + 1 }
 
 sub is_subset {
 	my ($self, $set) = @_;
-	$self->is_member($_) or return FALSE foreach (@$set);
+	$self->is_member($_) or return FALSE foreach ($set->to_list);
 	return TRUE;
 }
 
 sub union {
 	my ($self, $set) = @_;
 	my $union = ref($self)->new();
-	$union->add($_) foreach (@$set, @$self);
+	$union->add($_) foreach ($set->to_list, $self->to_list);
 	return $union;
 }
 
-sub to_list { [ @{shift()} ] }
-
-# my $setA = CustomSet->new(1..3)->add(3);
-# my $setB = CustomSet->new(1,2,3);
-# print "@{$setA->to_list}\n@{$setB->to_list}\n";
-# print "Test\n" if CustomSet->new(1,2,3)->is_equal(CustomSet->new());
+sub to_list { return @{shift()} }
 
 1;

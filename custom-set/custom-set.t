@@ -60,16 +60,16 @@ subtest 'Tested add()' => sub {
     ok( set(1,2,3)->add(3)->is_equal( set(1..3) ), "adding existing member is noop" );
 };
 
-# subtest 'Tested difference()' => sub {
-#     plan tests => 6;
+subtest 'Tested difference()' => sub {
+    plan tests => 6;
 
-#     isa_ok( set()->difference( set() ), $module, "return value of difference()" );
-#     ok( set()->difference( set() )->is_equal( set() ), "difference of two empty sets is an empty set" );
-#     ok( set()->difference( set(1..3) )->is_equal( set() ), "difference between empty set and non-empty set" );
-#     ok( set(1..3)->difference( set() )->is_equal( set(1..3) ), "difference between non-empty set and empty set" );
-#     ok( set(1,2,3)->difference( set(2,4) )->is_equal( set(1,3) ), "small differemce" );
-#     ok( set(1..10, 20..30)->difference( set(5..25) )->is_equal( set(1..4, 26..30) ), "large difference" );
-# };
+    isa_ok( set()->difference( set() ), $module, "return value of difference()" );
+    ok( set()->difference( set() )->is_equal( set() ), "difference of two empty sets is an empty set" );
+    ok( set()->difference( set(1..3) )->is_equal( set() ), "difference between empty set and non-empty set" );
+    ok( set(1..3)->difference( set() )->is_equal( set(1..3) ), "difference between non-empty set and empty set" );
+    ok( set(1,2,3)->difference( set(2,4) )->is_equal( set(1,3) ), "small differemce" );
+    ok( set(1..10, 20..30)->difference( set(5..25) )->is_equal( set(1..4, 26..30) ), "large difference" );
+};
 
 subtest 'Tested is_disjoint()' => sub {
     plan tests => 5;
@@ -135,10 +135,10 @@ subtest 'Tested union()' => sub {
     ok( set(1..10, 20..30)->union( set(5..25) )->is_equal( set(1..30) ), "large union" );
 };
 
-# subtest 'Tested to_list()' => sub {
-#     plan tests => 3;
+subtest 'Tested to_list()' => sub {
+    plan tests => 3;
 
-#     is_deeply( [ sort +set()->to_list() ], [], "empty set results in empty list" );
-#     is_deeply( [ sort +set(1..3)->to_list() ], [1,2,3], "set with elements results in list with elements" );
-#     is_deeply( [ sort +set(3,1,2,1)->to_list() ], [1,2,3], "set with duplicate elements still results in list with uniq elements" );
-# };
+    is_deeply( [ sort +set()->to_list() ], [], "empty set results in empty list" );
+    is_deeply( [ sort +set(1..3)->to_list() ], [1,2,3], "set with elements results in list with elements" );
+    is_deeply( [ sort +set(3,1,2,1)->to_list() ], [1,2,3], "set with duplicate elements still results in list with uniq elements" );
+};
